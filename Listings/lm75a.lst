@@ -1,10 +1,10 @@
-C51 COMPILER V9.59.0.0   LM75A                                                             07/15/2020 07:17:46 PAGE 1   
+C51 COMPILER V9.59.0.0   LM75A                                                             07/26/2020 21:17:50 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE LM75A
 OBJECT MODULE PLACED IN .\Objects\lm75a.obj
-COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE lm75a.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\lm75a.
-                    -lst) TABS(2) OBJECT(.\Objects\lm75a.obj)
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE lm75a.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\lm7
+                    -5a.lst) TABS(2) OBJECT(.\Objects\lm75a.obj)
 
 line level    source
 

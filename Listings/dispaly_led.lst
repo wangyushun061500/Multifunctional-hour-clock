@@ -1,10 +1,10 @@
-C51 COMPILER V9.59.0.0   DISPALY_LED                                                       07/15/2020 07:17:46 PAGE 1   
+C51 COMPILER V9.59.0.0   DISPALY_LED                                                       07/26/2020 21:17:50 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE DISPALY_LED
 OBJECT MODULE PLACED IN .\Objects\dispaly_led.obj
-COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE dispaly_led.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
-                    -dispaly_led.lst) TABS(2) OBJECT(.\Objects\dispaly_led.obj)
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE dispaly_led.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
+                    -gs\dispaly_led.lst) TABS(2) OBJECT(.\Objects\dispaly_led.obj)
 
 line level    source
 

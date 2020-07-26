@@ -45,11 +45,8 @@ void main(void){
 	delayms(100);//延时等待程序稳定
 	/***抗干扰初始化***/
 	space_temp = space;//重读一次抗干扰数据
-	temperature = lm75_get();//第一次载入温度
-	temperature = temperature*125;
 	/***正式程序***/
 	while(1){//主循环
-		gled = 1;
 		KeyHandle();
 	}
 }
