@@ -1,0 +1,53 @@
+C51 COMPILER V9.59.0.0   74HC164                                                           07/15/2020 07:17:45 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE 74HC164
+OBJECT MODULE PLACED IN .\Objects\74hc164.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE 74hc164.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\74hc
+                    -164.lst) TABS(2) OBJECT(.\Objects\74hc164.obj)
+
+line level    source
+
+   1          #include "H Group/config.h"
+   2          #include "H Group/74hc164.h"
+   3          
+   4          /**74HC164显示程序***/
+   5          void send(unsigned char a)
+   6          {
+   7   1        unsigned char code led_data[] = {
+   8   1        0x77,0x06,0x6b,0x2f,0x1e,0x3d,0x7d,0x07,0x7f,0x3f,//0~9,
+   9   1        0x5f,0x7c,0x71,0x6e,0x79,0x59,0x5e,0x70,0x08,0x80,0x00
+  10   1        //A(10)b(11)c(12)D(13)E(14)F(15),H(16),L(17),-(18),小数点(19),熄灭(20)
+  11   1        };
+  12   1        unsigned char i,j;
+  13   1        all = 0;
+  14   1        all = 1;
+  15   1        j = led_data[a];
+  16   1        for(i=0;i<8;i++){
+  17   2          if((j&0x01) == 0){
+  18   3            dat = 0;
+  19   3            clk = 0;
+  20   3            clk = 1;
+  21   3          }else{
+  22   3            dat = 1;
+  23   3            clk = 0;
+  24   3            clk = 1;
+  25   3          }
+  26   2          j = j>>1;
+  27   2        }
+  28   1      }
+  29          #endif
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     45    ----
+   CONSTANT SIZE    =     21    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

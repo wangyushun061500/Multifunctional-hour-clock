@@ -1,0 +1,8 @@
+".\Objects\main.obj",
+".\Objects\74hc164.obj",
+".\Objects\lm75a.obj",
+".\Objects\dispaly_led.obj",
+".\Objects\i2c.obj",
+".\Objects\adc.obj" 
+TO ".\Objects\第五版的程序编写" 
+PRINT(".\Listings\第五版的程序编写.m51") RAMSIZE(256) 

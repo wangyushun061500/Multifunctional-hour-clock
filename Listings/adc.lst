@@ -1,0 +1,53 @@
+C51 COMPILER V9.59.0.0   ADC                                                               07/15/2020 07:17:46 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE ADC
+OBJECT MODULE PLACED IN .\Objects\adc.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE base Group\adc.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
+                    -gs\adc.lst) TABS(2) OBJECT(.\Objects\adc.obj)
+
+line level    source
+
+   1          #include "H Group/config.h"
+   2          #include "adc.h"
+   3          
+   4          /***adc初始化函数***/
+   5          void adc_init(void)
+   6          {
+   7   1        P2M1 = 0x00;
+   8   1        P2M0 = 0x02;
+   9   1        P1ASF = 0x03;//允许P1的1.0，1.1为输入位
+  10   1        adc_datah = adc_datal = 0;  //清除缓存
+  11   1        adc  = adc_power |adc_speedh;
+  12   1        //延时用来成功输出数值
+  13   1      }
+  14          /**adc根据管脚数值取样**/
+  15          unsigned int get_adc(unsigned char channel)
+  16          {
+  17   1        unsigned char i;
+  18   1        adc_datah = adc_datal = 0;
+  19   1        adc = (adc & 0xe0) | adc_start | channel;
+  20   1        for(i=0; i<250; i++){
+  21   2          if(adc & adc_flag)
+  22   2          {
+  23   3            adc &= ~adc_flag;
+  24   3            return(adc_datah<<2 | adc_datal);
+  25   3          }
+  26   2        }
+  27   1        return 1024;
+  28   1      }
+  29          #endif
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     75    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

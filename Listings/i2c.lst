@@ -1,0 +1,213 @@
+C51 COMPILER V9.59.0.0   I2C                                                               07/15/2020 07:17:46 PAGE 1   
+
+
+C51 COMPILER V9.59.0.0, COMPILATION OF MODULE I2C
+OBJECT MODULE PLACED IN .\Objects\i2c.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE base Group\i2c.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
+                    -gs\i2c.lst) TABS(2) OBJECT(.\Objects\i2c.obj)
+
+line level    source
+
+   1          #include "H Group/config.h"
+   2          #include "i2c.h"
+   3          
+   4          /**i2c延时函数**/
+   5          void delay(void)//delay
+   6          {
+   7   1        char i = 2;
+   8   1        while(i--);
+   9   1      }
+  10          /**i2c初始化**/
+  11          void i2c_init(void)
+  12          {
+  13   1        scl = 1;
+  14   1        sda = 1;
+  15   1        delay();
+  16   1        delay();
+  17   1      }
+  18          /**i2c开始信号**/
+  19          void i2c_start(void)
+  20          {
+  21   1        sda = 1;
+  22   1        delay();
+  23   1        scl = 1;
+  24   1        delay();
+  25   1        sda = 0;
+  26   1        delay();
+  27   1        scl = 0;
+  28   1        delay();
+  29   1      }
+  30          /**i2c终止信号**/
+  31          void i2c_stop(void)
+  32          {
+  33   1        sda = 0;
+  34   1        delay();
+  35   1        scl = 1;
+  36   1        delay();
+  37   1        sda = 1;
+  38   1        delay();
+  39   1      }
+  40          /**i2c写一字节数据**/
+  41          void i2c_write(unsigned char dat)
+  42          {
+  43   1        unsigned char t = 8;
+  44   1        do{
+  45   2          sda = (bit)(dat & 0x80);
+  46   2          dat <<= 1;
+  47   2          scl = 1;
+  48   2          delay();
+  49   2          scl = 0;
+  50   2          delay();
+  51   2        }while(--t != 0);
+  52   1      }
+  53          /**i2c读一字节数据**/
+  54          unsigned char i2c_read(void)
+C51 COMPILER V9.59.0.0   I2C                                                               07/15/2020 07:17:46 PAGE 2   
+
+  55          {
+  56   1        unsigned char dat;
+  57   1        unsigned char t = 8;
+  58   1        sda = 1;
+  59   1        do{
+  60   2          scl = 1;
+  61   2          delay();
+  62   2          dat <<= 1;
+  63   2          if(sda){
+  64   3            dat |= 0x01;
+  65   3          }
+  66   2          scl = 0;
+  67   2          delay();
+  68   2        }while(--t != 0);
+  69   1        return dat;
+  70   1      }
+  71          /**i2c读取从机应答位**/
+  72          bit i2c_getack(void)
+  73          {
+  74   1        bit ack;
+  75   1        sda = 1;
+  76   1        delay();
+  77   1        scl = 1;
+  78   1        delay();
+  79   1        ack = sda;
+  80   1        scl = 0;
+  81   1        delay();
+  82   1        return ack;
+  83   1      }
+  84          /**i2c主机产生应答位**/
+  85          void i2c_putack(bit ack)
+  86          {
+  87   1        sda = ack;
+  88   1        delay();
+  89   1        scl = 1;
+  90   1        delay();
+  91   1        scl = 0;
+  92   1        delay();
+  93   1      }
+  94          /**i2c发送多个字节的数据
+  95          功能：主机通过I2C总线向从机发送多个字节的数据
+  96          参数：
+  97            SlaveAddr：从机地址（高7位是从机地址，最低位是写标志0）
+  98            SubAddr：从机的子地址
+  99            *dat：要发送的数据
+ 100          返回：
+ 101            0：发送成功
+ 102            1：在发送过程中出现异常
+ 103          **/
+ 104          bit i2c_send(unsigned char slaveaddr,
+ 105          unsigned char subaddr,
+ 106          unsigned char Size,
+ 107          char *dat)
+ 108          {
+ 109   1        i2c_init();
+ 110   1        delay();
+ 111   1        delay();
+ 112   1        slaveaddr &= 0xfe;
+ 113   1        i2c_start();
+ 114   1        i2c_write(slaveaddr);
+ 115   1        if(i2c_getack()){
+ 116   2          i2c_stop();
+C51 COMPILER V9.59.0.0   I2C                                                               07/15/2020 07:17:46 PAGE 3   
+
+ 117   2          return 1;
+ 118   2        }
+ 119   1        i2c_write(subaddr);
+ 120   1        if(i2c_getack()){
+ 121   2          i2c_stop();
+ 122   2          return 1;
+ 123   2        }
+ 124   1        do{
+ 125   2          i2c_write(*dat++);
+ 126   2          if(i2c_getack()){
+ 127   3            i2c_stop();
+ 128   3            return 1;
+ 129   3          }
+ 130   2        }while(--Size != 0);
+ 131   1        i2c_stop();
+ 132   1        return 0;
+ 133   1      }
+ 134          /**i2c接收多个字节的数据
+ 135          功能：主机通过I2C总线从从机接收多个字节的数据
+ 136          参数：
+ 137            SlaveAddr：从机地址（高7位是从机地址，最低位是读标志1）
+ 138            SubAddr：从机的子地址
+ 139            Size：数据的字节数
+ 140            *dat：保存接收到的数据
+ 141          返回：
+ 142            0：接收成功
+ 143            1：在接收过程中出现异常
+ 144          **/
+ 145          bit i2c_gets(unsigned char slaveaddr,
+ 146          unsigned char subaddr,
+ 147          unsigned char Size,
+ 148          char *dat)
+ 149          {
+ 150   1        i2c_init();
+ 151   1        delay();
+ 152   1        delay();
+ 153   1        slaveaddr &= 0xfe;
+ 154   1        i2c_start();
+ 155   1        i2c_write(slaveaddr);
+ 156   1        if(i2c_getack()){
+ 157   2          i2c_stop();
+ 158   2          return 1;
+ 159   2        }
+ 160   1        i2c_write(subaddr);
+ 161   1        if(i2c_getack()){
+ 162   2          i2c_stop();
+ 163   2          return 1;
+ 164   2        }
+ 165   1        i2c_start();
+ 166   1        slaveaddr |= 0x01;
+ 167   1        i2c_write(slaveaddr);
+ 168   1        if(i2c_getack()){
+ 169   2          i2c_stop();
+ 170   2          return 1;
+ 171   2        }
+ 172   1        for(;;){
+ 173   2          *dat++ = i2c_read();
+ 174   2          if(--Size == 0){
+ 175   3            i2c_putack(1);
+ 176   3            break;
+ 177   3          }
+ 178   2          i2c_putack(0);
+C51 COMPILER V9.59.0.0   I2C                                                               07/15/2020 07:17:46 PAGE 4   
+
+ 179   2        }
+ 180   1        i2c_stop();
+ 181   1        return 0;
+ 182   1      }
+ 183          #endif
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    300    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      12
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       2
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
