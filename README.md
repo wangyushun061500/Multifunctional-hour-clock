@@ -17,13 +17,13 @@
 
 **预览图：**
 
-![image](.\image\时间显示.jpg)
+![image](https://github.com/wangyushun061500/Multifunctional-hour-clock/blob/master/image/%E6%97%B6%E9%97%B4%E6%98%BE%E7%A4%BA.jpg)
 
 **时间显示：**
 
 ​	通过中间的时钟点来区分小时和分钟，中间的点每隔0.5S切换一次状态（即2Hz的频率闪烁）
 
-![image](.\image\温度显示.jpg)
+![image](https://github.com/wangyushun061500/Multifunctional-hour-clock/blob/master/image/%E6%B8%A9%E5%BA%A6%E6%98%BE%E7%A4%BA.jpg)
 
 **温度显示：**
 
