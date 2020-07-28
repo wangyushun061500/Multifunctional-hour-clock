@@ -1,7 +1,7 @@
 #ifndef __CONFIG_H
 #define __CONFIG_H
 
-#include "15w.h"
+#include "../15w.h"
 #include "intrins.h"
 
 /***管脚定义区***/

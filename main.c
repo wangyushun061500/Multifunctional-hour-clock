@@ -12,6 +12,7 @@ u8 menu = 1,keyvalue,dis_set,cor_all;
 u16 space,space_temp = 400,addr = 0;
 int temperature;
 
+
 void delayms(u16 c);//ms延时，自适应
 void delayus(u16 c);//us延时
 void timer0_init(void);//timer0初始化，20ms每次

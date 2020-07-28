@@ -18,6 +18,7 @@
         {
             "name": "Target 1",
             "includePath": [
+                "C:\\Keil_v5\\C51\\INC",
                 "c:\\Users\\Administrator\\AppData\\Local\\gitkraken\\app-7.1.0\\多功能小时钟",
                 "c:\\Users\\Administrator\\AppData\\Local\\gitkraken\\app-7.1.0\\多功能小时钟\\H Group",
                 "c:\\Users\\Administrator\\AppData\\Local\\gitkraken\\app-7.1.0\\多功能小时钟\\base Group"

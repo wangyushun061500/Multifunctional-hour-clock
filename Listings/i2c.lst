@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   I2C                                                               07/26/2020 21:17:51 PAGE 1   
+C51 COMPILER V9.59.0.0   I2C                                                               07/26/2020 22:16:01 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE I2C
@@ -62,7 +62,7 @@ line level    source
   52   1      }
   53          /**i2c读一字节数据**/
   54          unsigned char i2c_read(void)
-C51 COMPILER V9.59.0.0   I2C                                                               07/26/2020 21:17:51 PAGE 2   
+C51 COMPILER V9.59.0.0   I2C                                                               07/26/2020 22:16:01 PAGE 2   
 
   55          {
   56   1        unsigned char dat;
@@ -126,7 +126,7 @@ line level    source
  114   1        i2c_write(slaveaddr);
  115   1        if(i2c_getack()){
  116   2          i2c_stop();
-C51 COMPILER V9.59.0.0   I2C                                                               07/26/2020 21:17:51 PAGE 3   
+C51 COMPILER V9.59.0.0   I2C                                                               07/26/2020 22:16:01 PAGE 3   
 
  117   2          return 1;
  118   2        }
@@ -190,7 +190,7 @@ line level    source
  176   3            break;
  177   3          }
  178   2          i2c_putack(0);
-C51 COMPILER V9.59.0.0   I2C                                                               07/26/2020 21:17:51 PAGE 4   
+C51 COMPILER V9.59.0.0   I2C                                                               07/26/2020 22:16:01 PAGE 4   
 
  179   2        }
  180   1        i2c_stop();

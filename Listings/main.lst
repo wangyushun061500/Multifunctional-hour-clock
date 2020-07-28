@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   MAIN                                                              07/26/2020 21:28:08 PAGE 1   
+C51 COMPILER V9.59.0.0   MAIN                                                              07/26/2020 22:16:01 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE MAIN
@@ -22,416 +22,417 @@ line level    source
   12          u16 space,space_temp = 400,addr = 0;
   13          int temperature;
   14          
-  15          void delayms(u16 c);//ms延时，自适应
-  16          void delayus(u16 c);//us延时
-  17          void timer0_init(void);//timer0初始化，20ms每次
-  18          void timer2_init(void);//timer2初始化，5ms每次
-  19          u16 adc_avg(void);//读取红外感应距离数值并且进行抗干扰算法
-  20          void KeyHandle(void);//对按键操作进行判断
-  21          
-  22          void main(void){
-  23   1        /***定义main函数内变量***/
-  24   1        /***引脚初始化***/
-  25   1        gled = wled = 1;
-  26   1        g1 = g2 = g3 = g4 = 1;
-  27   1        key1 = key2 = key3 = 1;
-  28   1        gled = 0;
-  29   1        delayms(100);
-  30   1        gled = 1;
-  31   1        wled = 0;
-  32   1        /***变量初始化***/
-  33   1        hh = 11;
-  34   1        mm = 1;
-  35   1        ss = 0;
-  36   1        /***程序函数初始化***/
-  37   1        timer0_init();
-  38   1        timer2_init();
-  39   1        adc_init();
-  40   1        /***特殊寄存器初始化***/
-  41   1        EA = 1;//开启总中断
-  42   1        ET0 = 1;//允许定时器0中断
-  43   1        PT0 = 1;//定时器0中断优先级最高
-  44   1        IE2 = 0x04;//允许定时2产生中断
-  45   1        delayms(100);//延时等待程序稳定
-  46   1        /***抗干扰初始化***/
-  47   1        space_temp = space;//重读一次抗干扰数据
-  48   1        /***正式程序***/
-  49   1        while(1){//主循环
-  50   2          KeyHandle();
-  51   2        }
-  52   1      }
-  53          /**1ms延时程序**/
-  54          void delayms(u16 c)
-C51 COMPILER V9.59.0.0   MAIN                                                              07/26/2020 21:28:08 PAGE 2   
+  15          
+  16          void delayms(u16 c);//ms延时，自适应
+  17          void delayus(u16 c);//us延时
+  18          void timer0_init(void);//timer0初始化，20ms每次
+  19          void timer2_init(void);//timer2初始化，5ms每次
+  20          u16 adc_avg(void);//读取红外感应距离数值并且进行抗干扰算法
+  21          void KeyHandle(void);//对按键操作进行判断
+  22          
+  23          void main(void){
+  24   1        /***定义main函数内变量***/
+  25   1        /***引脚初始化***/
+  26   1        gled = wled = 1;
+  27   1        g1 = g2 = g3 = g4 = 1;
+  28   1        key1 = key2 = key3 = 1;
+  29   1        gled = 0;
+  30   1        delayms(100);
+  31   1        gled = 1;
+  32   1        wled = 0;
+  33   1        /***变量初始化***/
+  34   1        hh = 11;
+  35   1        mm = 1;
+  36   1        ss = 0;
+  37   1        /***程序函数初始化***/
+  38   1        timer0_init();
+  39   1        timer2_init();
+  40   1        adc_init();
+  41   1        /***特殊寄存器初始化***/
+  42   1        EA = 1;//开启总中断
+  43   1        ET0 = 1;//允许定时器0中断
+  44   1        PT0 = 1;//定时器0中断优先级最高
+  45   1        IE2 = 0x04;//允许定时2产生中断
+  46   1        delayms(100);//延时等待程序稳定
+  47   1        /***抗干扰初始化***/
+  48   1        space_temp = space;//重读一次抗干扰数据
+  49   1        /***正式程序***/
+  50   1        while(1){//主循环
+  51   2          KeyHandle();
+  52   2        }
+  53   1      }
+  54          /**1ms延时程序**/
+C51 COMPILER V9.59.0.0   MAIN                                                              07/26/2020 22:16:01 PAGE 2   
 
-  55          {
-  56   1        u8 i,j;
-  57   1        for(c;c>0;c--){
-  58   2          _nop_();
+  55          void delayms(u16 c)
+  56          {
+  57   1        u8 i,j;
+  58   1        for(c;c>0;c--){
   59   2          _nop_();
-  60   2          i = 22;
-  61   2          j = 128;
-  62   2          do
-  63   2          {
-  64   3            while (--j);
-  65   3          } while (--i);
-  66   2        }
-  67   1      }
-  68          /**1us延时程序**/
-  69          void delayus(u16 c)
-  70          {
-  71   1        u8 i;
-  72   1        for(c;c>0;c--){
-  73   2          i = 3;
-  74   2          while (--i);
-  75   2        }
-  76   1      }
-  77          
-  78          /**定时器T0初始化**/
-  79          void timer0_init(void)//20ms
-  80          {
-  81   1        AUXR &= 0x7F;   //定时器时钟12T模式
-  82   1        TMOD &= 0xF0;   //设置定时器模式
-  83   1        TL0 = 0x00;   //设置定时初值
-  84   1        TH0 = 0x70;   //设置定时初值
-  85   1        TF0 = 0;    //清除TF0标志
-  86   1        TR0 = 1;    //定时器0开始计时
-  87   1      }
-  88          
-  89          void timer2_init(void)    //5ms
-  90          {
-  91   1        AUXR &= 0xFB;   //定时器时钟12T模式
-  92   1        T2L = 0x00;   //设置定时初值
-  93   1        T2H = 0xDC;   //设置定时初值
-  94   1        AUXR |= 0x10;   //定时器2开始计时
-  95   1      }
-  96          
-  97          u16 adc_avg(void)
-  98          {
-  99   1        u16 shine_led,night_led;
- 100   1        if(space_bit == 0){
- 101   2          o_led = 1;
- 102   2          wled = 1;
- 103   2          delayus(200);
- 104   2          night_led = get_adc(0);
- 105   2          o_led = 0;
- 106   2          wled = 0;
- 107   2          delayus(40);
- 108   2          shine_led = get_adc(0);
- 109   2          o_led = 1;
- 110   2          wled = 1;
- 111   2        }
- 112   1        return (shine_led - night_led);
- 113   1      }
- 114          /**按键判断程序**/
- 115          void KeyHandle(void)
- 116          {
-C51 COMPILER V9.59.0.0   MAIN                                                              07/26/2020 21:28:08 PAGE 3   
+  60   2          _nop_();
+  61   2          i = 22;
+  62   2          j = 128;
+  63   2          do
+  64   2          {
+  65   3            while (--j);
+  66   3          } while (--i);
+  67   2        }
+  68   1      }
+  69          /**1us延时程序**/
+  70          void delayus(u16 c)
+  71          {
+  72   1        u8 i;
+  73   1        for(c;c>0;c--){
+  74   2          i = 3;
+  75   2          while (--i);
+  76   2        }
+  77   1      }
+  78          
+  79          /**定时器T0初始化**/
+  80          void timer0_init(void)//20ms
+  81          {
+  82   1        AUXR &= 0x7F;   //定时器时钟12T模式
+  83   1        TMOD &= 0xF0;   //设置定时器模式
+  84   1        TL0 = 0x00;   //设置定时初值
+  85   1        TH0 = 0x70;   //设置定时初值
+  86   1        TF0 = 0;    //清除TF0标志
+  87   1        TR0 = 1;    //定时器0开始计时
+  88   1      }
+  89          
+  90          void timer2_init(void)    //5ms
+  91          {
+  92   1        AUXR &= 0xFB;   //定时器时钟12T模式
+  93   1        T2L = 0x00;   //设置定时初值
+  94   1        T2H = 0xDC;   //设置定时初值
+  95   1        AUXR |= 0x10;   //定时器2开始计时
+  96   1      }
+  97          
+  98          u16 adc_avg(void)
+  99          {
+ 100   1        u16 shine_led,night_led;
+ 101   1        if(space_bit == 0){
+ 102   2          o_led = 1;
+ 103   2          wled = 1;
+ 104   2          delayus(200);
+ 105   2          night_led = get_adc(0);
+ 106   2          o_led = 0;
+ 107   2          wled = 0;
+ 108   2          delayus(40);
+ 109   2          shine_led = get_adc(0);
+ 110   2          o_led = 1;
+ 111   2          wled = 1;
+ 112   2        }
+ 113   1        return (shine_led - night_led);
+ 114   1      }
+ 115          /**按键判断程序**/
+ 116          void KeyHandle(void)
+C51 COMPILER V9.59.0.0   MAIN                                                              07/26/2020 22:16:01 PAGE 3   
 
- 117   1        if((~key1 || ~key2 || ~key3) && (keyvalue == 0)){//判断按键操作标志，如果操作标志为未操作状态，就执行单个
+ 117          {
+ 118   1        if((~key1 || ~key2 || ~key3) && (keyvalue == 0)){//判断按键操作标志，如果操作标志为未操作状态，就执行单个
              -按键确认
- 118   2          if(~key1){
- 119   3            keyvalue = 1;//置位相应的值
- 120   3            while(~key1);//按键松开才允许继续运行
- 121   3          }else if(~key2){
- 122   3            keyvalue = 2;//置位相应的值
- 123   3            while(~key2);
- 124   3          }else if(~key3){
- 125   3            keyvalue = 3;//置位相应的值
- 126   3            while(~key3);
- 127   3          }
- 128   2        }
- 129   1          if(keyvalue == 1){//如果为第一个操作状态
- 130   2            menu = 1;
- 131   2            if(dis_set == 0){//判断是否为空，并且进行初始化
- 132   3              dis_set = 1;//默认为第一个操作按键
- 133   3            }
- 134   2            if((~key1) && (dis_set != 0)){ //如果进行了初始化，并且按键有效
- 135   3              dis_set++;//响应按键加一
- 136   3              if(dis_set == 5){//每4个位一轮
- 137   4                dis_set = 1;//每次加一，不进行0（空状态跳转）
- 138   4              }
- 139   3              while(~key1);//进行按键等待
- 140   3            }
- 141   2            if((~key2) && (dis_set != 0)){//如果按键2有效
- 142   3              switch(dis_set){//判断上面的位设置值
- 143   4                case 1: hh = hh+10;break;//每十个加一
- 144   4                case 2: hh++;break;//自加一
- 145   4                case 3: mm = mm+10;break;
- 146   4                case 4: mm++;break;
- 147   4                default: break;//没有操作自行退出
- 148   4              }
- 149   3              while(~key2);//判断完成再进行等待
- 150   3            }
- 151   2            if(~key3){//确认按键
- 152   3              dis_set = 0;//复位位设置位为空
- 153   3              keyvalue = 0;//复位当前设置标志为空
- 154   3              while(~key3);//进行等待
- 155   3              menu = 1;
- 156   3            }
- 157   2          }
- 158   1          if(keyvalue == 2){
- 159   2            menu = 2;
- 160   2            if(~key1 || ~key2){
- 161   3              TempF = ~TempF;
- 162   3              while(~key1 || ~key2);//按键1和按键2都可以进行修改
- 163   3            }
- 164   2            if(~key3){//确认按键
- 165   3              keyvalue = 0;//复位当前设置标志为空
- 166   3              while(~key3);//进行等待
- 167   3              menu = 2;
- 168   3            }
- 169   2          }
- 170   1          if(keyvalue == 3){
- 171   2            menu = 3;
- 172   2            if(~key1){
- 173   3              if(cor_all == 0){//先判断防止出现负值
- 174   4                cor_all = 3;
- 175   4              }else{
- 176   4                cor_all--;
- 177   4                if(cor_all == 0){//先判断防止出现负值
-C51 COMPILER V9.59.0.0   MAIN                                                              07/26/2020 21:28:08 PAGE 4   
+ 119   2          if(~key1){
+ 120   3            keyvalue = 1;//置位相应的值
+ 121   3            while(~key1);//按键松开才允许继续运行
+ 122   3          }else if(~key2){
+ 123   3            keyvalue = 2;//置位相应的值
+ 124   3            while(~key2);
+ 125   3          }else if(~key3){
+ 126   3            keyvalue = 3;//置位相应的值
+ 127   3            while(~key3);
+ 128   3          }
+ 129   2        }
+ 130   1          if(keyvalue == 1){//如果为第一个操作状态
+ 131   2            menu = 1;
+ 132   2            if(dis_set == 0){//判断是否为空，并且进行初始化
+ 133   3              dis_set = 1;//默认为第一个操作按键
+ 134   3            }
+ 135   2            if((~key1) && (dis_set != 0)){ //如果进行了初始化，并且按键有效
+ 136   3              dis_set++;//响应按键加一
+ 137   3              if(dis_set == 5){//每4个位一轮
+ 138   4                dis_set = 1;//每次加一，不进行0（空状态跳转）
+ 139   4              }
+ 140   3              while(~key1);//进行按键等待
+ 141   3            }
+ 142   2            if((~key2) && (dis_set != 0)){//如果按键2有效
+ 143   3              switch(dis_set){//判断上面的位设置值
+ 144   4                case 1: hh = hh+10;break;//每十个加一
+ 145   4                case 2: hh++;break;//自加一
+ 146   4                case 3: mm = mm+10;break;
+ 147   4                case 4: mm++;break;
+ 148   4                default: break;//没有操作自行退出
+ 149   4              }
+ 150   3              while(~key2);//判断完成再进行等待
+ 151   3            }
+ 152   2            if(~key3){//确认按键
+ 153   3              dis_set = 0;//复位位设置位为空
+ 154   3              keyvalue = 0;//复位当前设置标志为空
+ 155   3              while(~key3);//进行等待
+ 156   3              menu = 1;
+ 157   3            }
+ 158   2          }
+ 159   1          if(keyvalue == 2){
+ 160   2            menu = 2;
+ 161   2            if(~key1 || ~key2){
+ 162   3              TempF = ~TempF;
+ 163   3              while(~key1 || ~key2);//按键1和按键2都可以进行修改
+ 164   3            }
+ 165   2            if(~key3){//确认按键
+ 166   3              keyvalue = 0;//复位当前设置标志为空
+ 167   3              while(~key3);//进行等待
+ 168   3              menu = 2;
+ 169   3            }
+ 170   2          }
+ 171   1          if(keyvalue == 3){
+ 172   2            menu = 3;
+ 173   2            if(~key1){
+ 174   3              if(cor_all == 0){//先判断防止出现负值
+ 175   4                cor_all = 3;
+ 176   4              }else{
+ 177   4                cor_all--;
+C51 COMPILER V9.59.0.0   MAIN                                                              07/26/2020 22:16:01 PAGE 4   
 
- 178   5                cor_all = 4;
- 179   5                }
- 180   4              }
- 181   3              while(~key1);
- 182   3            }
- 183   2            if(~key2){
- 184   3              cor_all++;
- 185   3              if(cor_all == 5){
- 186   4                cor_all = 1;
- 187   4              }
- 188   3              while(~key2);
- 189   3            }
- 190   2            if(~key3){//确认按键
- 191   3              keyvalue = 0;//复位当前设置标志为空
- 192   3              switch(cor_all){
- 193   4                case 1:{space_bit = 1; cor_bit = 0; off_bit = 1;};break;
- 194   4                case 2:{space_bit = 1; cor_bit = 1; off_bit = 0;};break;
- 195   4                case 3:{space_bit = 0; cor_bit = 0; off_bit = 0;};break;
- 196   4                case 4:{space_temp = space;};break;
- 197   4                default: cor_all = 3;break;
- 198   4              }
- 199   3              while(~key3);//进行等待
- 200   3              menu = 1;//自动关断
- 201   3            }
- 202   2          }
- 203   1        
- 204   1      }
- 205          /**T0中断程序**/
- 206          void timer0(void) interrupt 1 
- 207          {
- 208   1        u8 time,time1;
- 209   1      /**总时间判断**/
- 210   1        time++;
- 211   1        if((menu != 0) && (keyvalue == 0) && (off_bit == 0)){//自动关断判断
- 212   2          time1++;
- 213   2          if(time1 == 250){//判断循环位是否为空
- 214   3            if(cor_bit == 0){
- 215   4              menu = 0;
- 216   4            }else{
- 217   4              if(menu == 1){//每五秒切换一个状态
- 218   5                menu = 2;
- 219   5              }else{
- 220   5                menu = 1;
- 221   5              }
- 222   4            }
- 223   3          }
- 224   2        }
- 225   1        /**小数点判断**/
- 226   1        if((time > 25) && (menu == 1)){
- 227   2          dp = (bit)1;
- 228   2        }else{
- 229   2          dp = (bit)0;
- 230   2        }
- 231   1        if(time == 50){//每一个s
- 232   2          time = 0;
- 233   2          ss++;//自加
- 234   2          if(ss == 60){//分钟加一
- 235   3            ss = 0;
- 236   3            mm++;
- 237   3            if(mm == 60){//小时加一
- 238   4              mm = 0;
- 239   4              hh++;
-C51 COMPILER V9.59.0.0   MAIN                                                              07/26/2020 21:28:08 PAGE 5   
+ 178   4                if(cor_all == 0){//先判断防止出现负值
+ 179   5                cor_all = 4;
+ 180   5                }
+ 181   4              }
+ 182   3              while(~key1);
+ 183   3            }
+ 184   2            if(~key2){
+ 185   3              cor_all++;
+ 186   3              if(cor_all == 5){
+ 187   4                cor_all = 1;
+ 188   4              }
+ 189   3              while(~key2);
+ 190   3            }
+ 191   2            if(~key3){//确认按键
+ 192   3              keyvalue = 0;//复位当前设置标志为空
+ 193   3              switch(cor_all){
+ 194   4                case 1:{space_bit = 1; cor_bit = 0; off_bit = 1;};break;
+ 195   4                case 2:{space_bit = 1; cor_bit = 1; off_bit = 0;};break;
+ 196   4                case 3:{space_bit = 0; cor_bit = 0; off_bit = 0;};break;
+ 197   4                case 4:{space_temp = space;};break;
+ 198   4                default: cor_all = 3;break;
+ 199   4              }
+ 200   3              while(~key3);//进行等待
+ 201   3              menu = 1;//自动关断
+ 202   3            }
+ 203   2          }
+ 204   1        
+ 205   1      }
+ 206          /**T0中断程序**/
+ 207          void timer0(void) interrupt 1 
+ 208          {
+ 209   1        u8 time,time1;
+ 210   1      /**总时间判断**/
+ 211   1        time++;
+ 212   1        if((menu != 0) && (keyvalue == 0) && (off_bit == 0)){//自动关断判断
+ 213   2          time1++;
+ 214   2          if(time1 == 250){//判断循环位是否为空
+ 215   3            if(cor_bit == 0){
+ 216   4              menu = 0;
+ 217   4            }else{
+ 218   4              if(menu == 1){//每五秒切换一个状态
+ 219   5                menu = 2;
+ 220   5              }else{
+ 221   5                menu = 1;
+ 222   5              }
+ 223   4            }
+ 224   3          }
+ 225   2        }
+ 226   1        /**小数点判断**/
+ 227   1        if((time > 25) && (menu == 1)){
+ 228   2          dp = (bit)1;
+ 229   2        }else{
+ 230   2          dp = (bit)0;
+ 231   2        }
+ 232   1        if(time == 50){//每一个s
+ 233   2          time = 0;
+ 234   2          ss++;//自加
+ 235   2          if(ss == 60){//分钟加一
+ 236   3            ss = 0;
+ 237   3            mm++;
+ 238   3            if(mm == 60){//小时加一
+ 239   4              mm = 0;
+C51 COMPILER V9.59.0.0   MAIN                                                              07/26/2020 22:16:01 PAGE 5   
 
- 240   4              if(hh == 24){//凌晨复位
- 241   5                hh = 0;//24小时制
- 242   5              }
- 243   4            }
- 244   3          }
- 245   2        }
- 246   1        if(ss > 59){//大于59自动复位，
- 247   2          ss = 0;//调节时间不进行关联相加
- 248   2        }
- 249   1        if(mm > 59){
- 250   2          mm = 0;
- 251   2        }
- 252   1        if(hh > 23){
- 253   2          hh = 0;
- 254   2        }
- 255   1      }
- 256          /***T2中断程序***/
- 257          void timer2_isr(void) interrupt 12 
- 258          {
- 259   1        bit time_out;
- 260   1        u8 count1,count2,timer,t;
- 261   1        u16 Temp;
- 262   1        timer++;
- 263   1        if(timer == 10){
- 264   2          timer = 0;
- 265   2          t++;
- 266   2          if(t == 10){
- 267   3            t = 0;
- 268   3            if(menu == 2){
- 269   4              temperature = lm75_get();//读取温度
- 270   4              temperature = temperature*125;
- 271   4            }
- 272   3          }
- 273   2          /*读取adc数据*/
- 274   2          space = adc_avg();//读取距离
- 275   2          shine = get_adc(1);//读取光照度信息
- 276   2          
- 277   2          if(((hh > 6) && (mm > 30)) && ((hh < 18) && (mm <30)) && (shine > 500)){
- 278   3            shine = shine + 200;
- 279   3          }
- 280   2          else if(shine < 200){
- 281   3            wled = 0;
- 282   3          };
- 283   2          
- 284   2          if(shine > 1010)shine = 1010;
- 285   2          if(shine < 100)shine = 100;
- 286   2          /*感应开关抗干扰*/
- 287   2          if(space_bit == 0){
- 288   3            if(space > (space_temp+20)){//开启距离
- 289   4              count1++;
- 290   4              count2 = 0;
- 291   4              if(count1 == 3){
- 292   5                count1 = 0;
- 293   5                if(time_out == 0){
- 294   6                  if(menu == 1){
- 295   7                    menu = 2;
- 296   7                  }else{
- 297   7                    menu = 1;
- 298   7                  }
- 299   6                  time_out = 1;
- 300   6                }
- 301   5              }
-C51 COMPILER V9.59.0.0   MAIN                                                              07/26/2020 21:28:08 PAGE 6   
+ 240   4              hh++;
+ 241   4              if(hh == 24){//凌晨复位
+ 242   5                hh = 0;//24小时制
+ 243   5              }
+ 244   4            }
+ 245   3          }
+ 246   2        }
+ 247   1        if(ss > 59){//大于59自动复位，
+ 248   2          ss = 0;//调节时间不进行关联相加
+ 249   2        }
+ 250   1        if(mm > 59){
+ 251   2          mm = 0;
+ 252   2        }
+ 253   1        if(hh > 23){
+ 254   2          hh = 0;
+ 255   2        }
+ 256   1      }
+ 257          /***T2中断程序***/
+ 258          void timer2_isr(void) interrupt 12 
+ 259          {
+ 260   1        bit time_out;
+ 261   1        u8 count1,count2,timer,t;
+ 262   1        u16 Temp;
+ 263   1        timer++;
+ 264   1        if(timer == 10){
+ 265   2          timer = 0;
+ 266   2          t++;
+ 267   2          if(t == 10){
+ 268   3            t = 0;
+ 269   3            if(menu == 2){
+ 270   4              temperature = lm75_get();//读取温度
+ 271   4              temperature = temperature*125;
+ 272   4            }
+ 273   3          }
+ 274   2          /*读取adc数据*/
+ 275   2          space = adc_avg();//读取距离
+ 276   2          shine = get_adc(1);//读取光照度信息
+ 277   2          
+ 278   2          if(((hh > 6) && (mm > 30)) && ((hh < 18) && (mm <30)) && (shine > 500)){
+ 279   3            shine = shine + 200;
+ 280   3          }
+ 281   2          else if(shine < 200){
+ 282   3            wled = 0;
+ 283   3          };
+ 284   2          
+ 285   2          if(shine > 1010)shine = 1010;
+ 286   2          if(shine < 100)shine = 100;
+ 287   2          /*感应开关抗干扰*/
+ 288   2          if(space_bit == 0){
+ 289   3            if(space > (space_temp+20)){//开启距离
+ 290   4              count1++;
+ 291   4              count2 = 0;
+ 292   4              if(count1 == 3){
+ 293   5                count1 = 0;
+ 294   5                if(time_out == 0){
+ 295   6                  if(menu == 1){
+ 296   7                    menu = 2;
+ 297   7                  }else{
+ 298   7                    menu = 1;
+ 299   7                  }
+ 300   6                  time_out = 1;
+ 301   6                }
+C51 COMPILER V9.59.0.0   MAIN                                                              07/26/2020 22:16:01 PAGE 6   
 
- 302   4            }
- 303   3            if(space < (space_temp+10)){//关闭距离
- 304   4              count2++;
- 305   4              count1 = 0;
- 306   4              if(count2 == 3){
- 307   5                count2 = 0;
- 308   5                time_out = 0;
- 309   5              }
- 310   4            }   
- 311   3          }
- 312   2        }
- 313   1        if(menu == 1){//时钟显示
- 314   2          if(keyvalue == 1){//独立于定时器里面，防止主程序的按键判断等待的时候出现不显示的问题
- 315   3            if(dis_set == 1){//显示位1
- 316   4              if(~dp){
- 317   5                dis_led(0,hh/10);
- 318   5              }else{
- 319   5                dis_led(0,20);
- 320   5              }
- 321   4            }else{
- 322   4              dis_led(0,hh/10);
- 323   4            }
- 324   3            
- 325   3            if(dis_set == 2){//显示位2
- 326   4              if(~dp){
- 327   5                dis_led(1,hh%10);
- 328   5              }else{
- 329   5                dis_led(0,20);
- 330   5              }
- 331   4            }else{
- 332   4              dis_led(1,hh%10);
- 333   4            }
- 334   3            
- 335   3            if(dis_set == 3){//显示位3
- 336   4              if(~dp){
- 337   5                dis_led(2,mm/10);
- 338   5              }else{
- 339   5                dis_led(0,20);
- 340   5              }
- 341   4            }else{
- 342   4              dis_led(2,mm/10);
- 343   4            }
- 344   3            
- 345   3            if(dis_set == 4){//显示位4
- 346   4              if(~dp){
- 347   5                dis_led(3,mm%10);
- 348   5              }else{
- 349   5                dis_led(0,20);
- 350   5              }
- 351   4            }else{
- 352   4              dis_led(3,mm%10);
- 353   4            }
- 354   3          }else{//正常显示
- 355   3            dis_led(0,hh/10);
- 356   3            dis_led(1,hh%10);
- 357   3            dis_led(2,mm/10);
- 358   3            dis_led(3,mm%10);
- 359   3          }
- 360   2        }
- 361   1        if(menu == 2){//温度显示
- 362   2          if(TempF == 1){//显示为华摄氏度和摄氏度的标志位
- 363   3            Temp = ((temperature/100)*18/100)+32;//无符号所以多进行了一次整数运算
-C51 COMPILER V9.59.0.0   MAIN                                                              07/26/2020 21:28:08 PAGE 7   
+ 302   5              }
+ 303   4            }
+ 304   3            if(space < (space_temp+10)){//关闭距离
+ 305   4              count2++;
+ 306   4              count1 = 0;
+ 307   4              if(count2 == 3){
+ 308   5                count2 = 0;
+ 309   5                time_out = 0;
+ 310   5              }
+ 311   4            }   
+ 312   3          }
+ 313   2        }
+ 314   1        if(menu == 1){//时钟显示
+ 315   2          if(keyvalue == 1){//独立于定时器里面，防止主程序的按键判断等待的时候出现不显示的问题
+ 316   3            if(dis_set == 1){//显示位1
+ 317   4              if(~dp){
+ 318   5                dis_led(0,hh/10);
+ 319   5              }else{
+ 320   5                dis_led(0,20);
+ 321   5              }
+ 322   4            }else{
+ 323   4              dis_led(0,hh/10);
+ 324   4            }
+ 325   3            
+ 326   3            if(dis_set == 2){//显示位2
+ 327   4              if(~dp){
+ 328   5                dis_led(1,hh%10);
+ 329   5              }else{
+ 330   5                dis_led(0,20);
+ 331   5              }
+ 332   4            }else{
+ 333   4              dis_led(1,hh%10);
+ 334   4            }
+ 335   3            
+ 336   3            if(dis_set == 3){//显示位3
+ 337   4              if(~dp){
+ 338   5                dis_led(2,mm/10);
+ 339   5              }else{
+ 340   5                dis_led(0,20);
+ 341   5              }
+ 342   4            }else{
+ 343   4              dis_led(2,mm/10);
+ 344   4            }
+ 345   3            
+ 346   3            if(dis_set == 4){//显示位4
+ 347   4              if(~dp){
+ 348   5                dis_led(3,mm%10);
+ 349   5              }else{
+ 350   5                dis_led(0,20);
+ 351   5              }
+ 352   4            }else{
+ 353   4              dis_led(3,mm%10);
+ 354   4            }
+ 355   3          }else{//正常显示
+ 356   3            dis_led(0,hh/10);
+ 357   3            dis_led(1,hh%10);
+ 358   3            dis_led(2,mm/10);
+ 359   3            dis_led(3,mm%10);
+ 360   3          }
+ 361   2        }
+ 362   1        if(menu == 2){//温度显示
+ 363   2          if(TempF == 1){//显示为华摄氏度和摄氏度的标志位
+C51 COMPILER V9.59.0.0   MAIN                                                              07/26/2020 22:16:01 PAGE 7   
 
- 364   3            dis_led(0,Temp/100);
- 365   3            dis_led(1,Temp%100/10);
- 366   3            dis_led(2,Temp%10);
- 367   3            dis_led(3,15);
- 368   3          }else{
- 369   3            dis_led(0,temperature/10000);
- 370   3            dis_led(1,temperature%10000/1000);
- 371   3            dis_led(1,19);
- 372   3            dis_led(2,temperature%1000/100);
- 373   3            dis_led(3,12);
- 374   3          }
- 375   2        }
- 376   1        if(menu == 3){//显示all
- 377   2          if(cor_all != 0){
- 378   3          switch(cor_all){
- 379   4            case 1: {dis_led(0,18);dis_led(1,0);dis_led(2,1);dis_led(3,18);};break;
- 380   4            case 2: {dis_led(0,18);dis_led(1,0);dis_led(2,2);dis_led(3,18);};break;
- 381   4            case 3: {dis_led(0,18);dis_led(1,0);dis_led(2,3);dis_led(3,18);};break;
- 382   4            case 4: {
- 383   5              dis_led(0,space_temp/1000);
- 384   5              dis_led(1,(space_temp%1000)/100);
- 385   5              dis_led(2,(space_temp%100)/10);
- 386   5              dis_led(3,space_temp%10);
- 387   5            }
- 388   4            default: break;
- 389   4          }
- 390   3        }else{
- 391   3          dis_led(0,20);
- 392   3          dis_led(1,10);
- 393   3          dis_led(2,17);
- 394   3          dis_led(3,17);
- 395   3          }
- 396   2        }
- 397   1      }
- 398          #endif
- 399          /*===========================冗余程序存放================================*/
- 400          //test测试程序
- 401          /*
- 402              dis_led(0,space/1000);
- 403              dis_led(1,(space%1000)/100);
- 404              dis_led(2,(space%100)/10);
- 405              dis_led(3,space%10);*/
- 406          
- 407          /*  
- 408              dis_led(0,shine/1000);
- 409              dis_led(1,(shine%1000)/100);
- 410              dis_led(2,(shine%100)/10);
- 411              dis_led(3,shine%10);*/
+ 364   3            Temp = ((temperature/100)*18/100)+32;//无符号所以多进行了一次整数运算
+ 365   3            dis_led(0,Temp/100);
+ 366   3            dis_led(1,Temp%100/10);
+ 367   3            dis_led(2,Temp%10);
+ 368   3            dis_led(3,15);
+ 369   3          }else{
+ 370   3            dis_led(0,temperature/10000);
+ 371   3            dis_led(1,temperature%10000/1000);
+ 372   3            dis_led(1,19);
+ 373   3            dis_led(2,temperature%1000/100);
+ 374   3            dis_led(3,12);
+ 375   3          }
+ 376   2        }
+ 377   1        if(menu == 3){//显示all
+ 378   2          if(cor_all != 0){
+ 379   3          switch(cor_all){
+ 380   4            case 1: {dis_led(0,18);dis_led(1,0);dis_led(2,1);dis_led(3,18);};break;
+ 381   4            case 2: {dis_led(0,18);dis_led(1,0);dis_led(2,2);dis_led(3,18);};break;
+ 382   4            case 3: {dis_led(0,18);dis_led(1,0);dis_led(2,3);dis_led(3,18);};break;
+ 383   4            case 4: {
+ 384   5              dis_led(0,space_temp/1000);
+ 385   5              dis_led(1,(space_temp%1000)/100);
+ 386   5              dis_led(2,(space_temp%100)/10);
+ 387   5              dis_led(3,space_temp%10);
+ 388   5            }
+ 389   4            default: break;
+ 390   4          }
+ 391   3        }else{
+ 392   3          dis_led(0,20);
+ 393   3          dis_led(1,10);
+ 394   3          dis_led(2,17);
+ 395   3          dis_led(3,17);
+ 396   3          }
+ 397   2        }
+ 398   1      }
+ 399          #endif
+ 400          /*===========================冗余程序存放================================*/
+ 401          //test测试程序
+ 402          /*
+ 403              dis_led(0,space/1000);
+ 404              dis_led(1,(space%1000)/100);
+ 405              dis_led(2,(space%100)/10);
+ 406              dis_led(3,space%10);*/
+ 407          
+ 408          /*  
+ 409              dis_led(0,shine/1000);
+ 410              dis_led(1,(shine%1000)/100);
+ 411              dis_led(2,(shine%100)/10);
+ 412              dis_led(3,shine%10);*/
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
