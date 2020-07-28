@@ -17,13 +17,13 @@
 
 **预览图：**
 
-![image](https://github.com/wangyushun061500/Multifunctional-hour-clock/blob/master/image/%E6%97%B6%E9%97%B4%E6%98%BE%E7%A4%BA.jpg)
+![image](http://a1.qpic.cn/psc?/V12luday3ycIrM/ruAMsa53pVQWN7FLK88i5gtzsrYey2QsG4m0ZyAPCD1ba*dkZRH3*Mshbzwq2sUwGLOdER*GEFvI6D6eGKFOVtpXvvmJcsNIc3927lg4m2g!/c&ek=1&kp=1&pt=0&bo=nwU4BAAAAAAREIE!&tl=3&vuin=2305808176&tm=1595905200&sce=60-2-2&rf=0-0)
 
 **时间显示：**
 
 ​	通过中间的时钟点来区分小时和分钟，中间的点每隔0.5S切换一次状态（即2Hz的频率闪烁）
 
-![image](https://github.com/wangyushun061500/Multifunctional-hour-clock/blob/master/image/%E6%B8%A9%E5%BA%A6%E6%98%BE%E7%A4%BA.jpg)
+![image](http://a1.qpic.cn/psc?/V12luday3ycIrM/ruAMsa53pVQWN7FLK88i5gtzsrYey2QsG4m0ZyAPCD1M2Tn0ZGy2mBzmq9Mmydf3J2i2ytHjRVkVFr2FeW43gON7E1KO9QKO*YC65Nz588E!/c&ek=1&kp=1&pt=0&bo=nwU4BAAAAAAREIE!&tl=3&vuin=2305808176&tm=1595905200&sce=60-2-2&rf=0-0)
 
 **温度显示：**
 
