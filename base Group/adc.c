@@ -1,17 +1,17 @@
 #include "H Group/config.h"
 #include "adc.h"
 
-/***adc³õÊ¼»¯º¯Êı***/
+/***adcåˆå§‹åŒ–å‡½æ•°***/
 void adc_init(void)
 {
 	P2M1 = 0x00;
 	P2M0 = 0x02;
-	P1ASF = 0x03;//ÔÊĞíP1µÄ1.0£¬1.1ÎªÊäÈëÎ»
-	adc_datah = adc_datal = 0;  //Çå³ı»º´æ
+	P1ASF = 0x03;//å…è®¸P1çš„1.0ï¼Œ1.1ä¸ºè¾“å…¥ä½
+	adc_datah = adc_datal = 0;  //æ¸…é™¤ç¼“å­˜
 	adc  = adc_power |adc_speedh;
-  //ÑÓÊ±ÓÃÀ´³É¹¦Êä³öÊıÖµ
+  //å»¶æ—¶ç”¨æ¥æˆåŠŸè¾“å‡ºæ•°å€¼
 }
-/**adc¸ù¾İ¹Ü½ÅÊıÖµÈ¡Ñù**/
+/**adcæ ¹æ®ç®¡è„šæ•°å€¼å–æ ·**/
 unsigned int get_adc(unsigned char channel)
 {
 	unsigned char i;

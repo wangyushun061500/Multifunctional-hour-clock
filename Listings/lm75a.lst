@@ -1,4 +1,4 @@
-C51 COMPILER V9.59.0.0   LM75A                                                             07/26/2020 22:16:01 PAGE 1   
+C51 COMPILER V9.59.0.0   LM75A                                                             07/28/2020 09:50:47 PAGE 1   
 
 
 C51 COMPILER V9.59.0.0, COMPILATION OF MODULE LM75A
@@ -29,14 +29,13 @@ line level    source
   19   2          t=((t|buf[1])>>5);
   20   2          t=(0x800-t);
   21   2          }
-  22   1        gled = 0;
-  23   1        return t;
-  24   1      }
-  25          #endif
+  22   1        return t;
+  23   1      }
+  24          #endif
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    107    ----
+   CODE SIZE        =    105    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

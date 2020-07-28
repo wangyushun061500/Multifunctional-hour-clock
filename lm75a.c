@@ -19,7 +19,6 @@ int lm75_get(void){
 		t=((t|buf[1])>>5);
 		t=(0x800-t);
 		}
-	gled = 0;
 	return t;
 }
 #endif
