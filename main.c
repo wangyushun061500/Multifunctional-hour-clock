@@ -49,16 +49,10 @@ void main(void){
 	space_temp = space;//重读一次抗干扰数据
 	/***正式程序***/
 	while(1){//主循环
-		//KeyHandle();
-		key1 = key2 = key3 = 1;
-		if(key2 == 0){
-			gled = 0;
+		KeyHandle();
+		if(key1 && key2 && key3){
+			key1 = key2 = key3 = 1;//用于自动拉高电平
 		}
-		else
-		{
-			gled = 1;
-		}
-		
 	}
 }
 /**1ms延时程序**/
